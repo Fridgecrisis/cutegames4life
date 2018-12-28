@@ -4,12 +4,14 @@ using UnityEngine;
 
 public class StateMachine : MonoBehaviour {
 
-	State[] stateArray;
+	List<State> stateList;
 
 	// Use this for initialization
-	void Start () {
+	public void Start () {
 		
-		State[] stateArray = new State[] {};
+		Debug.Log("Starting State Machine.");
+		stateList = new List<State>();
+		NewState("base");
 		
 	}
 	
@@ -19,36 +21,58 @@ public class StateMachine : MonoBehaviour {
 	}
 	
 	// Needs to be updated with specific input format stuff
-	public void Update (int input) {
+	public void UpdateStates (int input) {
 		
-		for (int i = 0; i < stateArray.Length; i++) {
-			if (i < stateArray.Length) {
-				stateArray[i].Update(false, 0);
-			} else {
-				stateArray[i].Update(true, input);
+		for (int i = 0; i < stateList.Count; i++) {
+			if (i < stateList.Count - 1) {
+				stateList[i].Update(false, 0);
+			} else if (i == stateList.Count - 1) {
+				stateList[i].Update(true, input);
+				break;
 			}
 		}
 		
 	}
 	
-	// Creates a new instance of a state and a new, larger array to contain it.
+	// Adds a new state to the state list.
 	public void NewState (string type) {
 		
-		State newState = new State(type);
-		State[] newArray = new State[stateArray.Length + 1];
-		System.Array.Copy(stateArray, newArray, stateArray.Length);
-		newArray[newArray.Length] = newState;
-		stateArray = newArray;
+		Debug.Log("Adding new state: " + type);
+		switch (type) {
+			case "base":
+				stateList.Add(new StateBase(type));
+				break;
+			case "test1":
+				stateList.Add(new StateTest1(type));
+				break;
+			case "test2":
+				stateList.Add(new StateTest2(type));
+				break;
+			default:
+				stateList.Add(new State("unknown"));
+				break;
+		}
 		
 	}
 	
-	public void EndState () {
+	// Ends the most recent state in the state list.
+	public void EndCurrentState () {
 		
-		stateArray[stateArray.Length].End();
-		State[] newArray = new State[stateArray.Length - 1];
-		System.Array.Copy(stateArray, newArray, stateArray.Length - 1);
-		stateArray = newArray;
+		EndState(stateList.Count - 1);
 		
 	}
 	
+	// Ends a state with a specific state list index.
+	public void EndState(int index) {
+		
+		if (stateList[index] != null) {
+			Debug.Log("Ending state: " + stateList[index].type);
+			stateList[index].End();
+			stateList.RemoveAt(index);
+			stateList.TrimExcess();
+		} else {
+			Debug.Log("Trying to end a state that doesn't exist.");
+		}
+		
+	}
 }

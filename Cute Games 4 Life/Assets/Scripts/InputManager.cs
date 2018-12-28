@@ -2,20 +2,27 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InputManager : MonoBehaviour {
+// Might not need these
+public enum GameState {
+	PAUSED,
+	IN_WORLD,
+	MOUNTED,
+	UI
+}
 
-	// Use this for initialization
+public class InputManager : MonoBehaviour {
+	
 	void Start () {
 		
 	}
 	
-	// Update is called once per frame
-	public void Update () {
+	void Update () {
 		
 	}
 	
 	// Dummy function for now. Not sure how I'm going to pass along the input...
 	public int GetInput () {
+		// Check for input here
 		return 1;
 	}
 }

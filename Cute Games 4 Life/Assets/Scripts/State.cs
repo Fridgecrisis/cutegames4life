@@ -2,29 +2,37 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class State : MonoBehaviour {
+public class State {
 	
-	public State (string type) {
-		
-		Start();
-		
-	}
+	public string type;
 	
-	// Use this for initialization
-	void Start () {
+	public State () {
+		
+		type = "unknown";
 		
 	}
 	
-	// Update is called once per frame
-	void Update () {
+	public State (string inType) {
+		
+		type = inType;
 		
 	}
 	
-	public void Update (bool active, int input) {
+	public virtual void Start () {
+		
+		// To be extended by children.
 		
 	}
 	
-	public void End () {
+	public virtual void Update (bool active, int input) {
+
+		// To be extended by children.
+		
+	}
+	
+	public virtual void End () {
+		
+		// To be extended by children.
 		
 	}
 	

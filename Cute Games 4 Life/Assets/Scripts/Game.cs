@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Game : MonoBehaviour {
 
+	public static Game game;
+
 	public InputManager inputManager;
 	public StateMachine stateMachine;
 	public EventHandler eventHandler;
@@ -11,15 +13,15 @@ public class Game : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		
-		stateMachine.NewState("base");
+		game = this;
+		stateMachine.Start();
 		
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		
-		inputManager.Update();
-		stateMachine.Update(inputManager.GetInput());
+		stateMachine.UpdateStates(inputManager.GetInput());
 		
 	}
 }
