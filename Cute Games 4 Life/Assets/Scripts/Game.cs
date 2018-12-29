@@ -15,13 +15,27 @@ public class Game : MonoBehaviour {
 		
 		game = this;
 		stateMachine.Start();
+		eventHandler.Start();
 		
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		
-		stateMachine.UpdateStates(inputManager.GetInput());
+	
+		stateMachine.UpdateStates();
 		
 	}
+	
+	public static void NewState (string type) {
+		
+		game.stateMachine.NewState(type);
+		
+	}
+	
+	public static void EndCurrentState () {
+		
+		game.stateMachine.EndCurrentState();
+		
+	}
+	
 }

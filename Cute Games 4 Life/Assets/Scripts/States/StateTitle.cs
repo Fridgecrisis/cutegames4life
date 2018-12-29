@@ -5,8 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class StateTitle : State {
 
-	int index = 0;
-	int indexMax = 3;
+	public int cursorIndex = 0;
+	public int cursorIndexMax = 3;
 	Cursor cursor;
 	Canvas canvas;
 
@@ -22,50 +22,54 @@ public class StateTitle : State {
 		
 		Debug.Log("Loading Title");
 		SceneManager.LoadScene("Title", LoadSceneMode.Additive);
-		index = 0;
+		cursorIndex = 0;
 		
 	}
 	
-	public override void Update (bool active, int input) {
+	public override void Update () {
 		
-		base.Update(active, input);
+		base.Update();
 		
-		if (active == true) {
-			LookForCursor();
-			UpdateCanvasRenderCamera();
-			if (Input.GetKeyDown("escape")) {
-				if (index != 3) {
-					CursorSet(3);
-					UpdateCursorPosition();
-				} else if (index == 3) {
-					Game.game.stateMachine.EndAllStates();
-				}
-			} else if (Input.GetKeyDown("return")) {
-				Debug.Log("Selection: " + index);
-				switch (index) {
-					case 0:
-						// New Game
-						break;
-					case 1:
-						// Continue
-						break;
-					case 2:
-						// Options
-						break;
-					case 3:
-						// Quit
-						Game.game.stateMachine.EndAllStates();
-						break;
-					default:
-						break;
-				}
-			} else if (Input.GetKeyDown("up")) {
-				CursorUp();
+	}
+	
+	public override void UpdateActive () {
+		
+		base.UpdateActive();
+		
+		LookForCursor();
+		UpdateCanvasRenderCamera();
+		if (Input.GetKeyDown("escape")) {
+			if (cursorIndex != 3) {
+				CursorSet(3);
 				UpdateCursorPosition();
-			} else if (Input.GetKeyDown("down")) {
-				CursorDown();
-				UpdateCursorPosition();
+			} else if (cursorIndex == 3) {
+				Game.game.stateMachine.EndAllStates();
 			}
+		} else if (Input.GetKeyDown("return")) {
+			Debug.Log("Selection: " + cursorIndex);
+			switch (cursorIndex) {
+				case 0:
+					// New Game
+					break;
+				case 1:
+					// Continue
+					break;
+				case 2:
+					// Options
+					break;
+				case 3:
+					// Quit
+					Game.game.stateMachine.EndAllStates();
+					break;
+				default:
+					break;
+			}
+		} else if (Input.GetKeyDown("up")) {
+			CursorUp();
+			UpdateCursorPosition();
+		} else if (Input.GetKeyDown("down")) {
+			CursorDown();
+			UpdateCursorPosition();
 		}
 		
 	}
@@ -101,29 +105,29 @@ public class StateTitle : State {
 	void UpdateCursorPosition () {
 		
 		if (cursor != null) {
-			cursor.SetNewDestination(new Vector3(canvas.transform.position.x - 20, canvas.transform.position.y - 5 - (index * 5), canvas.transform.position.z));
+			cursor.SetNewDestination(new Vector3(canvas.transform.position.x - 20, canvas.transform.position.y - 5 - (cursorIndex * 5), canvas.transform.position.z));
 		}
 		
 	}
 	
 	void CursorUp () {
-		if (index > 0) {
-			index -= 1;
-		} else if (index == 0) {
-			index = indexMax;
+		if (cursorIndex > 0) {
+			cursorIndex -= 1;
+		} else if (cursorIndex == 0) {
+			cursorIndex = cursorIndexMax;
 		}
 	}
 	
 	void CursorDown () {
-		if (index < indexMax) {
-			index += 1;
-		} else if (index == indexMax) {
-			index = 0;
+		if (cursorIndex < cursorIndexMax) {
+			cursorIndex += 1;
+		} else if (cursorIndex == cursorIndexMax) {
+			cursorIndex = 0;
 		}
 	}
 	
 	void CursorSet (int newIndex) {
-		index = newIndex;
+		cursorIndex = newIndex;
 	}
 	
 	public override void End () {

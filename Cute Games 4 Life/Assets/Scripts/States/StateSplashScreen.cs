@@ -5,8 +5,6 @@ using UnityEngine.SceneManagement;
 
 public class StateSplashScreen : State {
 
-	int timer = 0;
-
 	public StateSplashScreen (string inType) {
 		
 		type = inType;
@@ -19,25 +17,26 @@ public class StateSplashScreen : State {
 		
 		Debug.Log("Loading Splash Screen");
 		SceneManager.LoadScene("SplashScreen", LoadSceneMode.Additive);
-		timer = 100;
 		
 	}
 	
-	public override void Update (bool active, int input) {
+	public override void Update () {
 		
-		base.Update(active, input);
+		base.Update();
 		
-		if (active == true) {
-			if (Input.GetKeyDown("escape") || Input.GetKeyDown("return")) {
-				timer = 0;
+	}
+	
+	public override void UpdateActive () {
+		
+		base.UpdateActive();
+		
+		/* if (Input.GetKeyDown("escape") || Input.GetKeyDown("return")) {
+			foreach (TriggerTimer trigger in triggerList) {
+				if (trigger is TriggerTimer) {
+					trigger.time = 0;
+				}
 			}
-			if (timer <= 0) {
-				Game.game.stateMachine.EndCurrentState();
-				Game.game.stateMachine.NewState("title");
-			} else {
-				timer -= 1;
-			}
-		}
+		} */
 		
 	}
 	

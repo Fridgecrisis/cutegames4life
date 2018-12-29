@@ -4,13 +4,17 @@ using UnityEngine;
 
 public class StateMachine : MonoBehaviour {
 
-	List<State> stateList;
+	public List<State> masterStateList;
+	public List<State> currentStateList;
 
 	// Use this for initialization
 	public void Start () {
 		
 		Debug.Log("Starting State Machine.");
-		stateList = new List<State>();
+		foreach (Transform child in transform) {
+			masterStateList.Add(child.gameObject.GetComponent<State>() as State);
+		}
+		currentStateList = new List<State>();
 		NewState("base");
 		
 	}
@@ -21,15 +25,14 @@ public class StateMachine : MonoBehaviour {
 	}
 	
 	// Needs to be updated with specific input format stuff
-	public void UpdateStates (int input) {
+	public void UpdateStates () {
 		
-		for (int i = 0; i < stateList.Count; i++) {
-			if (i < stateList.Count - 1) {
-				stateList[i].Update(false, 0);
-			} else if (i == stateList.Count - 1) {
-				stateList[i].Update(true, input);
-				break;
-			}
+		foreach (State state in currentStateList) {
+			state.Update();
+		}
+		
+		if (currentStateList.Count >= 1) {
+			currentStateList[currentStateList.Count - 1].UpdateActive();
 		}
 		
 	}
@@ -38,45 +41,30 @@ public class StateMachine : MonoBehaviour {
 	public void NewState (string type) {
 		
 		Debug.Log("Adding new state: " + type);
-		switch (type) {
-			case "base":
-				stateList.Add(new StateBase(type));
-				break;
-			case "test1":
-				stateList.Add(new StateTest1(type));
-				break;
-			case "test2":
-				stateList.Add(new StateTest2(type));
-				break;
-			case "splashscreen":
-				stateList.Add(new StateSplashScreen(type));
-				break;
-			case "title":
-				stateList.Add(new StateTitle(type));
-				break;
-			default:
-				stateList.Add(new State("unknown"));
-				break;
+		foreach (State state in masterStateList) {
+			if (state.type == type) {
+				currentStateList.Add(state);
+			}
 		}
-		stateList[stateList.Count - 1].Start();
+		currentStateList[currentStateList.Count - 1].Start();
 		
 	}
 	
 	// Ends the most recent state in the state list.
 	public void EndCurrentState () {
 		
-		EndState(stateList.Count - 1);
+		EndState(currentStateList.Count - 1);
 		
 	}
 	
 	// Ends a state with a specific state list index.
 	public void EndState(int index) {
 		
-		if (stateList[index] != null) {
-			Debug.Log("Ending state: " + stateList[index].type);
-			stateList[index].End();
-			stateList.RemoveAt(index);
-			stateList.TrimExcess();
+		if (currentStateList[index] != null) {
+			Debug.Log("Ending state: " + currentStateList[index].type);
+			currentStateList[index].End();
+			currentStateList.RemoveAt(index);
+			currentStateList.TrimExcess();
 		} else {
 			Debug.Log("Trying to end a state that doesn't exist.");
 		}
@@ -86,7 +74,7 @@ public class StateMachine : MonoBehaviour {
 	// Ends all states and, by extension, the game.
 	public void EndAllStates() {
 		
-		for (int i = stateList.Count - 1; i >= 0; i--) {
+		for (int i = currentStateList.Count - 1; i >= 0; i--) {
 			EndState(i);
 		}
 		

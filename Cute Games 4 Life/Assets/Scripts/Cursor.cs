@@ -35,7 +35,7 @@ public class Cursor : MonoBehaviour {
 	}
 	
 	public void SetNewDestination (Vector3 newPosition) {
-		
+
 		startTime = Time.time;
 		startPosition = transform.position;
 		endPosition = newPosition;

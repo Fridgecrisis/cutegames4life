@@ -16,23 +16,27 @@ public class StateBase : State {
 		
 	}
 	
-	public override void Update (bool active, int input) {
+	public override void Update () {
 		
-		base.Update(active, input);
+		base.Update();
 		
-		if (active == true) {
-			Game.game.stateMachine.NewState("splashscreen");
+	}
+	
+	public override void UpdateActive () {
+		
+		base.UpdateActive();
+		
+		Game.game.stateMachine.NewState("splashscreen");
 			
-			// For testing.
-			if (Input.GetKeyDown("a")) {
-				Debug.Log("You're pressing A in the base state.");
-			}
-			if (Input.GetKeyDown("s")) {
-				Game.game.stateMachine.NewState("test1");
-			}
-			if (Input.GetKeyDown("escape")) {
-				Game.game.stateMachine.EndCurrentState();
-			}
+		// For testing.
+		if (Input.GetKeyDown("a")) {
+			Debug.Log("You're pressing A in the base state.");
+		}
+		if (Input.GetKeyDown("s")) {
+			Game.game.stateMachine.NewState("test1");
+		}
+		if (Input.GetKeyDown("escape")) {
+			Game.game.stateMachine.EndCurrentState();
 		}
 		
 	}

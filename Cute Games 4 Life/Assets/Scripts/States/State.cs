@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class State {
+public class State : MonoBehaviour {
 	
 	public string type;
+	public List<Trigger> triggerList;
 	
 	public State () {
 		
@@ -20,13 +21,35 @@ public class State {
 	
 	public virtual void Start () {
 		
+		foreach (Transform child in transform) {
+			if (child.name == "Triggers") {
+				foreach (Transform grandchild in child) {
+					triggerList.Add(grandchild.gameObject.GetComponent<Trigger>());
+				}
+			}
+		}
 		// To be extended by children.
 		
 	}
 	
-	public virtual void Update (bool active, int input) {
-
+	public virtual void Update () {
+		
 		// To be extended by children.
+		
+	}
+	
+	public virtual void UpdateActive () {
+
+		UpdateTriggers();
+		// To be extended by children.
+		
+	}
+	
+	public virtual void UpdateTriggers () {
+		
+		foreach (Trigger trigger in triggerList) {
+			trigger.UpdateTrigger();
+		}
 		
 	}
 	

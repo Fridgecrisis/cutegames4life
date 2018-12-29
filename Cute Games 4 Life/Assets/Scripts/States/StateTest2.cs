@@ -16,17 +16,21 @@ public class StateTest2 : State {
 		
 	}
 	
-	public override void Update (bool active, int input) {
+	public override void Update () {
 		
-		base.Update(active, input);
+		base.Update();
 		
-		if (active == true) {
-			if (Input.GetKeyDown("a")) {
-				Debug.Log("You're pressing A in the test2 state.");
-			}
-			if (Input.GetKeyDown("escape")) {
-				Game.game.stateMachine.EndCurrentState();
-			}
+	}
+	
+	public override void UpdateActive () {
+		
+		base.UpdateActive();
+		
+		if (Input.GetKeyDown("a")) {
+			Debug.Log("You're pressing A in the test2 state.");
+		}
+		if (Input.GetKeyDown("escape")) {
+			Game.game.stateMachine.EndCurrentState();
 		}
 		
 	}
