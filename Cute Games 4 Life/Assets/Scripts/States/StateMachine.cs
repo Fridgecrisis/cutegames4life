@@ -48,10 +48,17 @@ public class StateMachine : MonoBehaviour {
 			case "test2":
 				stateList.Add(new StateTest2(type));
 				break;
+			case "splashscreen":
+				stateList.Add(new StateSplashScreen(type));
+				break;
+			case "title":
+				stateList.Add(new StateTitle(type));
+				break;
 			default:
 				stateList.Add(new State("unknown"));
 				break;
 		}
+		stateList[stateList.Count - 1].Start();
 		
 	}
 	
@@ -72,6 +79,15 @@ public class StateMachine : MonoBehaviour {
 			stateList.TrimExcess();
 		} else {
 			Debug.Log("Trying to end a state that doesn't exist.");
+		}
+		
+	}
+	
+	// Ends all states and, by extension, the game.
+	public void EndAllStates() {
+		
+		for (int i = stateList.Count - 1; i >= 0; i--) {
+			EndState(i);
 		}
 		
 	}

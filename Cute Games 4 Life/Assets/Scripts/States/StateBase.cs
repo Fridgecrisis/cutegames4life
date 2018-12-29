@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StateTest1 : State {
+public class StateBase : State {
 
-	public StateTest1 (string inType) {
+	public StateBase (string inType) {
 		
 		type = inType;
 		
@@ -21,11 +21,14 @@ public class StateTest1 : State {
 		base.Update(active, input);
 		
 		if (active == true) {
+			Game.game.stateMachine.NewState("splashscreen");
+			
+			// For testing.
 			if (Input.GetKeyDown("a")) {
-				Debug.Log("You're pressing A in the test1 state.");
+				Debug.Log("You're pressing A in the base state.");
 			}
 			if (Input.GetKeyDown("s")) {
-				Game.game.stateMachine.NewState("test2");
+				Game.game.stateMachine.NewState("test1");
 			}
 			if (Input.GetKeyDown("escape")) {
 				Game.game.stateMachine.EndCurrentState();
@@ -37,6 +40,9 @@ public class StateTest1 : State {
 	public override void End () {
 		
 		base.End();
+		
+		Debug.Log("Quitting game.");
+		Application.Quit();
 		
 	}
 }
